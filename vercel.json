@@ -1,0 +1,41 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "name": "ai-business-survey",
+  "version": 2,
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "framework": "vite",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        }
+      ]
+    }
+  ],
+  "env": {
+    "VITE_AIRTABLE_API_KEY": "@airtable-api-key",
+    "VITE_AIRTABLE_BASE_ID": "@airtable-base-id",
+    "VITE_AIRTABLE_TABLE_NAME": "@airtable-table-name",
+    "VITE_RESEND_API_KEY": "@resend-api-key",
+    "VITE_FROM_EMAIL": "@from-email",
+    "VITE_FROM_NAME": "@from-name"
+  }
+}
