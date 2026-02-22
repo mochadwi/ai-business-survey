@@ -1,17 +1,212 @@
-# AI Business Survey - Deployment Guide
+# 🚀 Deployment Guide - AI Business Survey
 
 ## Quick Start
 
+### 1. Deploy to Vercel (Recommended - Free)
+
 ```bash
+# Install Vercel CLI
+npm i -g vercel
+
+# Login to Vercel
+vercel login
+
+# Deploy from project directory
+cd ai-business-survey
+vercel
+
+# Follow prompts:
+# - Set up and deploy? [Y/n] → Y
+# - Which scope? → Select your account
+# - Link to existing project? → N (create new)
+# - What's your project name? → ai-business-survey
+```
+
+**Or use Vercel Dashboard:**
+1. Go to https://vercel.com/new
+2. Import your GitHub repo: `mochadwi/ai-business-survey`
+3. Framework Preset: Vite
+4. Click Deploy
+
+---
+
+## 2. Set Up Airtable (Free Tier: 1,200 records/base)
+
+### Create Base
+1. Go to https://airtable.com
+2. Create new base → "AI Survey Responses"
+3. Rename table to "Survey Responses"
+
+### Add Fields (Column Headers):
+```
+Email                  (Email)
+WhatsApp               (Single line text)
+CompanySize            (Single select)
+Position               (Single select)
+Industry               (Single select)
+AIAdoption             (Single select)
+Challenges             (Long text)
+Priority               (Single select)
+Workflows              (Long text)
+TimeWasted             (Single select)
+Budget                 (Single select)
+DecisionMaker          (Single select)
+Deliverables           (Long text)
+EngagementModel        (Single select)
+Benefit                (Single select)
+LeadScore              (Number)
+LeadCategory           (Single select)
+SubmittedAt            (Date)
+Source                 (Single line text)
+```
+
+### Get API Credentials:
+1. Go to https://airtable.com/create/tokens
+2. Create token with `data.records:write` scope
+3. Copy your **Base ID** from the URL or API docs
+
+---
+
+## 3. Set Up Resend.com (Free: 100 emails/day)
+
+1. Sign up: https://resend.com
+2. Verify your domain (or use `onboarding@resend.dev` for testing)
+3. Get API key from: https://resend.com/api-keys
+4. Add domain to verified senders
+
+---
+
+## 4. Configure Environment Variables
+
+In Vercel Dashboard:
+1. Go to Project Settings → Environment Variables
+2. Add these variables:
+
+```
+VITE_AIRTABLE_API_KEY   = your_airtable_token
+VITE_AIRTABLE_BASE_ID   = your_base_id
+VITE_AIRTABLE_TABLE_NAME= Survey Responses
+VITE_RESEND_API_KEY     = your_resend_api_key
+VITE_FROM_EMAIL         = noreply@yourdomain.com
+```
+
+**Or via CLI:**
+```bash
+vercel env add VITE_AIRTABLE_API_KEY
+vercel env add VITE_AIRTABLE_BASE_ID
+vercel env add VITE_AIRTABLE_TABLE_NAME
+vercel env add VITE_RESEND_API_KEY
+vercel env add VITE_FROM_EMAIL
+```
+
+Then redeploy:
+```bash
+vercel --prod
+```
+
+---
+
+## 5. Lead Scoring System
+
+### Scoring Formula (Max: 140 points)
+
+| Factor | Criteria | Points |
+|--------|----------|--------|
+| **Company Size** | Startup (<10) | 5 |
+| | SMB (10-50) | 10 |
+| | Mid (50-200) | 15 |
+| | Enterprise (>200) | 20 |
+| **AI Adoption** | Exploration | 5 |
+| | Sporadic | 10 |
+| | Partial | 15 |
+| | Operational | 20 |
+| | Strategic | 25 |
+| **Priority** | Efficiency | 10 |
+| | Revenue | 15 |
+| | Both | 25 |
+| | Unclear | 5 |
+| **Budget** | None | 0 |
+| | Pilot (<10jt) | 5 |
+| | Small (10-30jt) | 10 |
+| | Serious (30-100jt) | 20 |
+| | Transformation (>100jt) | 30 |
+| **Decision Authority** | Self (CEO/Founder) | 20 |
+| | Recommend | 15 |
+| | Committee | 10 |
+| | Finance | 10 |
+| | Education | 5 |
+| **Time Savings** | Low (<10 hrs/week) | 5 |
+| | Medium (10-30) | 10 |
+| | High (30-60) | 15 |
+| | Critical (>60) | 20 |
+
+### Lead Categories
+
+| Score Range | Category | Action |
+|-------------|----------|--------|
+| 90-100 | 🔥 Hot Lead | Immediate follow-up (24h) |
+| 70-89 | ⭐ Warm Lead | Priority nurture (48h) |
+| 50-69 | ✅ Qualified | Standard nurture |
+| <50 | 🌱 Nurture | Long-term education |
+
+---
+
+## 6. Email Sequences
+
+### Hot Leads (90-100)
+- Immediate booking link
+- Case studies
+- Direct consultation offer
+
+### Warm Leads (70-89)
+- Educational content
+- Soft pitch
+- ROI calculator
+
+### Qualified (50-69)
+- AI Playbook
+- Webinar invitation
+- Industry-specific content
+
+### Nurture (<50)
+- AI 101 guide
+- Free workshop
+- Newsletter signup
+
+---
+
+## 7. Testing
+
+### Test Airtable Connection
+Add this to browser console after deployment:
+```javascript
+import { testAirtableConnection } from './src/lib/airtable';
+testAirtableConnection().then(console.log);
+```
+
+### Test Email
+```javascript
+import { testEmailConfiguration } from './src/lib/email';
+testEmailConfiguration('your@email.com').then(console.log);
+```
+
+---
+
+## 8. Local Development
+
+```bash
+# Clone repo
+git clone https://github.com/mochadwi/ai-business-survey.git
+cd ai-business-survey
+
 # Install dependencies
 npm install
 
 # Copy environment variables
-cp .env.example .env.local
+cp .env.example .env
+# Edit .env with your credentials
 
-# Edit .env.local with your API keys
-
-# Start development server
+# Run dev server
 npm run dev
 
 # Build for production
@@ -20,225 +215,53 @@ npm run build
 
 ---
 
-## 1. Airtable Setup
-
-### Create Your Airtable Base
-
-1. Go to [Airtable](https://airtable.com) and create a new base
-2. Create a table named `Survey Responses` (or your preferred name)
-3. Add the following fields (column names must match exactly):
-
-| Field Name | Type | Description |
-|------------|------|-------------|
-| Email | Single line text | Contact email |
-| WhatsApp | Single line text | WhatsApp number |
-| CompanySize | Single line text | Q1: Company size |
-| Position | Single line text | Q2: Job position |
-| Industry | Single line text | Q3: Industry sector |
-| AIAdoption | Single line text | Q4: AI adoption level |
-| Challenges | Long text | Q5: Main challenges (comma-separated) |
-| Priority | Single line text | Q6: Business priority |
-| Workflows | Long text | Q7: Time-consuming workflows |
-| TimeWasted | Single line text | Q8: Hours wasted per week |
-| Budget | Single line text | Q9: Budget range |
-| DecisionMaker | Single line text | Q10: Decision process |
-| Deliverables | Long text | Q11: Desired deliverables |
-| EngagementModel | Single line text | Q12: Preferred engagement |
-| Benefit | Single line text | Q14: Requested benefit |
-| LeadScore | Number | Calculated lead score (0-140) |
-| LeadCategory | Single line text | hot/warm/qualified/nurture |
-| SubmittedAt | Date | ISO timestamp |
-| Source | Single line text | Form source identifier |
-
-### Get Airtable API Credentials
-
-1. Go to [Airtable Developer Hub](https://airtable.com/create/tokens)
-2. Create a new personal access token with these scopes:
-   - `data.records:read`
-   - `data.records:write`
-   - `schema.bases:read`
-3. Copy your API key
-4. Find your Base ID in your Airtable URL:
-   - Format: `https://airtable.com/appXXXXXXXXXXXXXX/...`
-   - The `appXXXXXXXXXXXXXX` part is your Base ID
-
----
-
-## 2. Resend.com Email Setup
-
-### Configure Resend
-
-1. Sign up at [Resend.com](https://resend.com)
-2. Verify your domain (e.g., `aibusiness.id`)
-3. Go to API Keys → Create API Key
-4. Copy your API key
-
-### Email Templates
-
-The application includes 4 email sequences based on lead category:
-
-| Category | Score | Email Focus |
-|----------|-------|-------------|
-| Hot Lead | 90-100 | Immediate booking link, case studies |
-| Warm Lead | 70-89 | Educational content + soft pitch |
-| Qualified | 50-69 | Standard nurture sequence |
-| Nurture | <50 | Value-first content, no sales pitch |
-
----
-
-## 3. Environment Variables
-
-Create a `.env.local` file (or set in Vercel dashboard):
-
-```env
-# Airtable
-VITE_AIRTABLE_API_KEY=patXXXXXXXX.XXXXXXXX
-VITE_AIRTABLE_BASE_ID=appXXXXXXXXXXXXXX
-VITE_AIRTABLE_TABLE_NAME=Survey Responses
-
-# Resend Email
-VITE_RESEND_API_KEY=re_xxxxxxxx
-VITE_FROM_EMAIL=hello@aibusiness.id
-VITE_FROM_NAME=AI Business Team
-```
-
----
-
-## 4. Vercel Deployment
-
-### Option A: Vercel CLI
-
-```bash
-# Install Vercel CLI
-npm i -g vercel
-
-# Login
-vercel login
-
-# Deploy
-vercel
-
-# Deploy to production
-vercel --prod
-```
-
-### Option B: Vercel Dashboard
-
-1. Push code to GitHub
-2. Import project in [Vercel Dashboard](https://vercel.com/new)
-3. Set environment variables in Project Settings
-4. Deploy
-
-### Environment Variables in Vercel
-
-In Vercel Dashboard → Project Settings → Environment Variables:
-
-```
-VITE_AIRTABLE_API_KEY = patXXXXXXXX.XXXXXXXX
-VITE_AIRTABLE_BASE_ID = appXXXXXXXXXXXXXX
-VITE_AIRTABLE_TABLE_NAME = Survey Responses
-VITE_RESEND_API_KEY = re_xxxxxxxx
-VITE_FROM_EMAIL = hello@aibusiness.id
-VITE_FROM_NAME = AI Business Team
-```
-
----
-
-## 5. Lead Scoring Formula
-
-### Scoring Breakdown (Max: 140 points)
-
-| Question | Field | Values | Max Points |
-|----------|-------|--------|------------|
-| Q1 | Company Size | startup=5, smb=10, mid=15, enterprise=20 | 20 |
-| Q4 | AI Adoption | exploration=5, sporadic=10, partial=15, operational=20, strategic=25 | 25 |
-| Q6 | Priority | efficiency=10, revenue=15, both=25, unclear=5 | 25 |
-| Q8 | Time Wasted | low=5, medium=10, high=15, critical=20 | 20 |
-| Q9 | Budget | none=0, pilot=5, small=10, serious=20, transformation=30 | 30 |
-| Q10 | Decision Authority | self=20, recommend=15, committee=10, finance=10, education=5 | 20 |
-
-### Lead Categories
-
-| Category | Score Range | Action |
-|----------|-------------|--------|
-| Hot Lead | 90-100 | Immediate follow-up (within 24h) |
-| Warm Lead | 70-89 | Priority nurture (within 48h) |
-| Qualified | 50-69 | Standard nurture sequence |
-| Nurture | <50 | Long-term education, no pitch |
-
----
-
-## 6. Testing
-
-### Test Airtable Connection
-
-Check browser console on the success page - submission results are logged.
-
-### Test Email
-
-Use the test function in browser console:
-
-```javascript
-import { testEmailConfiguration } from './lib/email';
-testEmailConfiguration('your@email.com');
-```
-
----
-
-## 7. File Structure
-
-```
-src/
-├── components/
-│   ├── LandingPage.tsx      # Landing page
-│   ├── ProgressBar.tsx      # Progress indicator
-│   ├── QuestionCard.tsx     # Question display
-│   └── SuccessPage.tsx      # Results with lead score
-├── data/
-│   └── questions.ts         # Survey questions
-├── hooks/
-│   └── useSurveySubmit.ts   # Submission logic hook
-├── lib/
-│   ├── airtable.ts          # Airtable API client
-│   ├── email.ts             # Resend email service
-│   └── leadScoring.ts       # Lead scoring calculation
-├── types/
-│   └── survey.ts            # TypeScript types
-├── App.tsx                  # Main app component
-└── main.tsx                 # Entry point
-```
-
----
-
 ## Troubleshooting
 
-### Airtable submission fails
-
-1. Check API key permissions
-2. Verify Base ID and Table Name
-3. Ensure all field names match exactly
-4. Check browser console for error details
-
-### Email not sending
-
-1. Verify Resend API key
-2. Check domain verification status in Resend
-3. Check spam folders
-4. Review Resend dashboard for delivery status
-
-### Build fails
-
+### Build Fails
 ```bash
-# Clear cache and rebuild
-rm -rf node_modules dist
+# Clean and rebuild
+rm -rf dist node_modules
 npm install
 npm run build
 ```
 
+### Airtable 401 Error
+- Check API token has `data.records:write` scope
+- Verify Base ID is correct
+- Ensure table name matches exactly
+
+### Email Not Sending
+- Verify Resend API key
+- Check sender email is verified
+- Check spam folders
+
+### Environment Variables Not Working
+- Must prefix with `VITE_` for Vite
+- Redeploy after adding variables
+- Check Vercel dashboard for correct values
+
 ---
 
-## Support
+## Cost Estimate
 
-For questions or issues:
-- Email: hello@aibusiness.id
-- WhatsApp: +62 8xx-xxxx-xxxx
+| Service | Free Tier | Paid (if needed) |
+|---------|-----------|------------------|
+| Vercel | Unlimited bandwidth | Pro: $20/mo |
+| Airtable | 1,200 records/base | Plus: $12/mo |
+| Resend | 100 emails/day | $1/1,000 emails |
+
+**Total: FREE for up to ~1,000 responses/month**
+
+---
+
+## Next Steps After Deployment
+
+1. ✅ Set up custom domain (optional)
+2. ✅ Add Google Analytics (optional)
+3. ✅ Connect Zapier for additional automations
+4. ✅ Set up Slack notifications for Hot Leads
+5. ✅ Create CRM integration (HubSpot/Salesforce)
+
+---
+
+**Need help?** Open an issue on GitHub or contact support.
