@@ -5,7 +5,7 @@ Since Railway CLI requires interactive login, here are the fastest deployment op
 ## Option 1: One-Liner Deploy (Recommended)
 
 ```bash
-cd ~/workspaces/github.com/mochadwi/ai-business-survey && npx @railway/cli login && npx @railway/cli up
+cd ~/workspaces/github.com/mochadwi/ai-business-survey && npx @railway/cli login && npx @railway/cli up --region asia-southeast1
 ```
 
 This will:
@@ -38,8 +38,8 @@ railway login
 cd ~/workspaces/github.com/mochadwi/ai-business-survey
 railway link
 
-# Step 4: Deploy
-railway up
+# Step 4: Deploy (Singapore region)
+railway up --region asia-southeast1
 
 # Step 5: Set environment variables
 railway variables set VITE_AIRTABLE_API_KEY="your_token"
@@ -109,7 +109,7 @@ railway up
 ✅ Health check passed
 
 Environment: production
-Region: us-west1
+Region: asia-southeast1 (Singapore)
 Deployment ID: xxx
 ```
 
@@ -157,8 +157,8 @@ npx @railway/cli login
 # Create and link project
 npx @railway/cli init
 
-# Deploy
-npx @railway/cli up
+# Deploy (Singapore region)
+npx @railway/cli up --region asia-southeast1
 
 # Set variables (replace with your actual values)
 npx @railway/cli variables set VITE_AIRTABLE_API_KEY=""

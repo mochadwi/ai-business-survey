@@ -33,8 +33,8 @@ else
 fi
 
 echo ""
-echo "🚀 Deploying to Railway..."
-railway up
+echo "🚀 Deploying to Railway (Singapore region)..."
+railway up --region asia-southeast1
 
 echo ""
 echo "📊 Deployment Status:"

@@ -5,6 +5,7 @@
     "buildCommand": "npm run build"
   },
   "deploy": {
+    "region": "asia-southeast1",
     "startCommand": "npx serve -s dist -l $PORT",
     "healthcheckPath": "/",
     "healthcheckTimeout": 100,

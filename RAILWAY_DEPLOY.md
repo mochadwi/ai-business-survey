@@ -23,8 +23,8 @@ railway login
 cd ai-business-survey
 railway link
 
-# Deploy
-railway up
+# Deploy (Singapore region)
+railway up --region asia-southeast1
 
 # Open in browser
 railway open
@@ -68,6 +68,7 @@ Railway automatically redeploys when variables change.
     "buildCommand": "npm run build"  // Creates dist/
   },
   "deploy": {
+    "region": "asia-southeast1",  // Singapore region
     "startCommand": "npx serve -s dist -l $PORT",
     "healthcheckPath": "/"       // Health check endpoint
   }
