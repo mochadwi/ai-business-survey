@@ -97,10 +97,12 @@ export const surveyQuestions: Question[] = [
     type: 'single',
     required: true,
     options: [
-      { id: 'efficiency', label: 'EFISIENSI OPERASIONAL: Mengurangi biaya, mengotomatisasi tugas repetitif, meningkatkan produktivitas tanpa merekrut banyak karyawan baru', emoji: '🛠️' },
-      { id: 'revenue', label: 'PENINGKATAN REVENUE: Scale up marketing/penjualan, generate leads lebih banyak, meningkatkan conversion rate', emoji: '🚀' },
-      { id: 'both', label: 'KEDUANYA: Efisiensi di satu sisi, pertumbuhan di sisi lain', emoji: '⚖️' },
-      { id: 'unclear', label: 'Belum pasti, memerlukan analisis lebih lanjut', emoji: '🤷' },
+      { id: 'revenue', label: '🎯 PENINGKATAN REVENUE: Scale up marketing/penjualan, generate leads lebih banyak, meningkatkan conversion rate, expand ke market baru', emoji: '🚀' },
+      { id: 'efficiency', label: '⚡ EFISIENSI OPERASIONAL: Mengotomatisasi tugas repetitif, meningkatkan produktivitas tim, mempercepat delivery tanpa merekrut banyak karyawan baru', emoji: '⚡' },
+      { id: 'cost', label: '💰 PENGURANGAN BIAYA: Menekan operational cost, mengurangi overhead, optimize resource allocation, outsource dengan AI', emoji: '💰' },
+      { id: 'both', label: '⚖️ KEDUANYA (Revenue + Efficiency): Pertumbuhan di sisi sales/marketing, efisiensi di sisi operasional', emoji: '🎯' },
+      { id: 'all_three', label: '🔥 SEMUANYA: Revenue ↑ Efficiency ↑ Cost ↓ — transformasi menyeluruh', emoji: '🔥' },
+      { id: 'unclear', label: '🤷 Belum pasti, memerlukan analisis lebih lanjut', emoji: '📊' },
     ],
   },
   {
